@@ -5,7 +5,7 @@ const NameInput = (props) => {
 
   return (
     <>
-      <FormGroup onChange={props.onChange}>
+      <FormGroup>
           {/* A name text input field */}
           <Input type='textarea' placeholder='name'/>
       </FormGroup>
