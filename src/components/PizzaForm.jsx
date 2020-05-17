@@ -1,7 +1,7 @@
 import Axios from "axios";
 import React, { useEffect, useState } from "react";
 import { Route } from "react-router-dom";
-import { Form, Input, FormGroup, Button } from "reactstrap";
+import { Form, Input, FormGroup, Button, Label } from "reactstrap";
 import * as yup from "yup";
 
 // [ ] Text input form component for special instructions
@@ -9,32 +9,33 @@ import * as yup from "yup";
 const PizzaForm = (props) => {
   const [formInput, setFormInput] = useState({
     name: "",
+    specialInstructions: "",
+    pizzaSize: "",
   });
 
   // state for errors
   const [errors, setErrors] = useState({
     name: "",
+    specialInstructions: "",
+    pizzaSize: "",
   });
 
   // state for post requests
   const [order, setOrder] = useState([]);
 
   const inputChanged = (e) => {
+    e.persist();
     setFormInput({ ...formInput, [e.target.name]: e.target.value });
+    let checkboxValue =
+      e.target.type === "checkbox" ? e.target.checked : e.target.value;
     validateChange(e);
-  };
-
-  const onFormSubmit = (e) => {
-    e.preventDefault();
-    const newFormInput = {
-      name: formInput.name,
-    };
-    setFormInput([...formInput, newFormInput]);
   };
 
   // use yup to create form schema
   const formSchema = yup.object().shape({
-    name: yup.string().required("Name is a required field"),
+    name: yup.string().min(2).required("Name is a required field"),
+    pizzaSize: yup.string().required("Select a valid pizza size"),
+    specialInstructions: yup.string(),
   });
 
   // validate changes based on schema
@@ -56,45 +57,65 @@ const PizzaForm = (props) => {
       });
   };
 
-    // handle state when form is submitted
-    const sumbitForm = event => {
-      event.preventDefault();
-      Axios.post("https://reqres.in/api/users", formInput)
-          .then(res => {
-              setOrder([res.data, ...order]);
-       
-              // clear state after submitting
-              setFormInput({
-                  name: '',
-              })
-          })
-          .catch(err => console.error(err.res)
-      
-      )};
+  // handle state when form is submitted
+  const sumbitForm = (event) => {
+    event.preventDefault();
+    Axios.post("https://reqres.in/api/users", formInput)
+      .then((res) => {
+        setOrder([res.data, ...order]);
+        console.log(res);
+        // clear state after submitting
+        setFormInput({
+          name: "",
+        });
+      })
+      .catch((err) => console.error(err.res));
+  };
   return (
     <>
       <Route path="/pizza">
-        <Form onSubmit={onFormSubmit}>
+        <Form onSubmit={sumbitForm}>
           <h3>Build Your Own Pizza</h3>
           <FormGroup>
             {/* A name text input field */}
-            <Input type="textarea" placeholder="name" onChange={inputChanged} />
-            <Button color='primary'>Submit Name</Button>
+            <label htmlFor="name">Name</label>
+            <Input
+              type="text"
+              name="name"
+              placeholder="name"
+              value={formInput.name}
+              onChange={inputChanged}
+            />
+            {errors.name.length > 2 ? (
+              <p>name must be longer than two characters</p>
+            ) : null}
           </FormGroup>
 
           <FormGroup className="dark">
-            <h3>Choice of Size</h3>
+            <Label width="md">Choice of Size</Label>
+
+            <Input
+              type="select"
+              value={formInput.pizzaSize}
+              name="pizzaSize"
+              id="sizes"
+              onChange={inputChanged}
+            >
+              <option value="small">Small</option>
+              <option value="medium">Medium</option>
+              <option value="large">Large</option>
+            </Input>
           </FormGroup>
-          <select type="select">
-            <option value="small">Small</option>
-            <option value="medium">Medium</option>
-            <option value="large">Large</option>
-          </select>
           <FormGroup className="dark">
             <h3>Choice of Sauce</h3>
           </FormGroup>
           <FormGroup check>
-            <Input type="radio" value="original-red" onChange={inputChanged} />
+            <Input
+              type="radio"
+              value="original-red"
+              onChange={inputChanged}
+              checked={formInput.radio}
+            />
             Original Red
           </FormGroup>
           <FormGroup check>
@@ -207,6 +228,7 @@ const PizzaForm = (props) => {
           </FormGroup>
           <FormGroup check>
             <Input
+              name="extra-cheese"
               type="checkbox"
               value="Extra-Cheese"
               onChange={inputChanged}
@@ -224,10 +246,15 @@ const PizzaForm = (props) => {
 
             <Input
               type="textarea"
+              name="specialInstructions"
               placeholder="Anything else you'd like to add?"
+              id="instructions"
               onChange={inputChanged}
+              value={formInput.specialInstructions}
             />
           </FormGroup>
+
+          <Button color="primary">Submit</Button>
         </Form>
       </Route>
     </>
