@@ -9,15 +9,21 @@ import * as yup from "yup";
 const PizzaForm = (props) => {
   const [formInput, setFormInput] = useState({
     name: "",
-    specialInstructions: "",
     pizzaSize: "",
+    sauces: "",
+    toppings: "",
+    specialInstructions: "",
+    substitute: "",
   });
 
   // state for errors
   const [errors, setErrors] = useState({
     name: "",
-    specialInstructions: "",
     pizzaSize: "",
+    sauces: "",
+    toppings: "",
+    specialInstructions: "",
+    substitute: "",
   });
 
   // state for post requests
@@ -36,6 +42,9 @@ const PizzaForm = (props) => {
     name: yup.string().min(2).required("Name is a required field"),
     pizzaSize: yup.string().required("Select a valid pizza size"),
     specialInstructions: yup.string(),
+    sauces: yup.boolean(),
+    toppings: yup.array(),
+    substitute: yup.boolean(),
   });
 
   // validate changes based on schema
@@ -67,6 +76,10 @@ const PizzaForm = (props) => {
         // clear state after submitting
         setFormInput({
           name: "",
+          pizzaSize: "",
+          sauces: "",
+          toppings: "",
+          specialInstructions: "",
         });
       })
       .catch((err) => console.error(err.res));
@@ -114,21 +127,33 @@ const PizzaForm = (props) => {
               type="radio"
               value="original-red"
               onChange={inputChanged}
+              name="sauces"
               checked={formInput.radio}
             />
             Original Red
           </FormGroup>
           <FormGroup check>
-            <Input type="radio" value="Garlic-Ranch" onChange={inputChanged} />
+            <Input
+              name="sauces"
+              type="radio"
+              value="Garlic-Ranch"
+              onChange={inputChanged}
+            />
             Garlic Ranch
           </FormGroup>
           <FormGroup check>
-            <Input type="radio" value="BBQ-Sauce" onChange={inputChanged} />
+            <Input
+              name="sauces"
+              type="radio"
+              value="BBQ-Sauce"
+              onChange={inputChanged}
+            />
             BBQ Sauce
           </FormGroup>
           <FormGroup check>
             <Input
               type="radio"
+              name="sauces"
               value="Spinach-Alfredo"
               onChange={inputChanged}
             />
@@ -139,17 +164,25 @@ const PizzaForm = (props) => {
             Choose up to 10
           </FormGroup>
           <FormGroup check>
-            <Input type="checkbox" value="pepperoni" onChange={inputChanged} />
+            <Input
+              type="checkbox"
+              name="toppings"
+              onChange={inputChanged}
+            />
             Pepporoni
           </FormGroup>
           <FormGroup check>
-            <Input type="checkbox" value="Sausage" onChange={inputChanged} />
+            <Input
+              type="checkbox"
+              name="toppings"
+              onChange={inputChanged}
+            />
             Sausage
           </FormGroup>
           <FormGroup check>
             <Input
               type="checkbox"
-              value="Canadian-Bacon"
+              name="toppings"
               onChange={inputChanged}
             />
             Canadian Bacon
@@ -157,7 +190,7 @@ const PizzaForm = (props) => {
           <FormGroup check>
             <Input
               type="checkbox"
-              value="Spicy-Italian-Sausage"
+              name="toppings"
               onChange={inputChanged}
             />
             Spicy Italian Sausage
@@ -165,19 +198,23 @@ const PizzaForm = (props) => {
           <FormGroup check>
             <Input
               type="checkbox"
-              value="Grilled-Chicken"
+              name="toppings"
               onChange={inputChanged}
             />
             Grilled Chicken
           </FormGroup>
           <FormGroup check>
-            <Input type="checkbox" value="Onions" onChange={inputChanged} />
+            <Input
+              type="checkbox"
+              name="toppings"
+              onChange={inputChanged}
+            />
             Onions
           </FormGroup>
           <FormGroup check>
             <Input
               type="checkbox"
-              value="Green-Pepper"
+              name="toppings"
               onChange={inputChanged}
             />
             Green Pepper
@@ -185,7 +222,7 @@ const PizzaForm = (props) => {
           <FormGroup check>
             <Input
               type="checkbox"
-              value="Diced-Tomatoes"
+              name="toppings"
               onChange={inputChanged}
             />
             Diced Tomatoes
@@ -193,7 +230,7 @@ const PizzaForm = (props) => {
           <FormGroup check>
             <Input
               type="checkbox"
-              value="Black-Olives"
+              name="toppings"
               onChange={inputChanged}
             />
             Black Olives
@@ -201,7 +238,7 @@ const PizzaForm = (props) => {
           <FormGroup check>
             <Input
               type="checkbox"
-              value="Roasted-Garlic"
+              name="toppings"
               onChange={inputChanged}
             />
             Roasted Garlic
@@ -209,28 +246,34 @@ const PizzaForm = (props) => {
           <FormGroup check>
             <Input
               type="checkbox"
-              value="Artichoke-Hearts"
+              name="toppings"
               onChange={inputChanged}
             />
             Artichoke Hearts
           </FormGroup>
           <FormGroup check>
             <Input
+              data-cy="topping1"
               type="checkbox"
-              value="Three-Cheese"
+              name="toppings"
               onChange={inputChanged}
             />
             Three Cheese
           </FormGroup>
           <FormGroup check>
-            <Input type="checkbox" value="Pineapple" onChange={inputChanged} />
+            <Input
+              data-cy="topping2"
+              type="checkbox"
+              name="toppings"
+              onChange={inputChanged}
+            />
             Pineapple
           </FormGroup>
           <FormGroup check>
             <Input
-              name="extra-cheese"
+              data-cy="topping3"
               type="checkbox"
-              value="Extra-Cheese"
+              name="toppings"
               onChange={inputChanged}
             />
             Extra Cheese
@@ -238,13 +281,13 @@ const PizzaForm = (props) => {
           <FormGroup className="dark" check>
             <h3>Choice of Substitute</h3>
             <p>Choose up to 1</p>
-            <Input type="checkbox" onChange={inputChanged} />
+            <Input name="substitute" type="checkbox" onChange={inputChanged} />
             <p>Gluten Free Crust (+ $1.00)</p>
           </FormGroup>
           <FormGroup className="dark">
             <h2>Special Instructions</h2>
 
-            <Input
+            <input
               type="textarea"
               name="specialInstructions"
               placeholder="Anything else you'd like to add?"
@@ -254,7 +297,9 @@ const PizzaForm = (props) => {
             />
           </FormGroup>
 
-          <Button color="primary">Submit</Button>
+          <Button data-cy="submit" color="primary">
+            Submit
+          </Button>
         </Form>
       </Route>
     </>

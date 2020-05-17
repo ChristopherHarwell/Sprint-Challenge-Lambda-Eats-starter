@@ -13,8 +13,19 @@ Demonstrate your understanding of this week's concepts by answering the followin
 Edit this document to include your answers after each question. Make sure to leave a blank line above and below your answer so it is clear and easy to read by your Team Lead.
 
 1. In 1-2 sentences, explain what React's `useRouteMatch` hook is used for.
+
+the 'useRouteMatch()' hook allows you to have nested paths with similar routes that update dynamically.
+
+for example having a path that is '/user/<username>'
+where username needs to be dynamic....you could use useRouteMatch() for this.
+
 2. How would you explain form validation to someone who has never programmed before?
+
+"A great example of this is when you are filling out a form to order Pizza Hut and you use autofill and it accidently adds the state name instead of the state initials and the form gives an error so you have to correct the information before you can proceed"
+
 3. In 1-2 sentences, define end to end testing.
+
+E2E testing is a way to test the entire project for what the user sees and experiences on the website.
 
 You are expected to be able to answer all these questions. Your responses contribute to your Sprint Challenge grade. Skipping this section **will** prevent you from passing this challenge.
 
@@ -40,19 +51,19 @@ Your MVP should include, at a minimum, the following components.
 - [x] A homepage that has a "/" route and links to your form (button, nav bar, or any other type of link is acceptable)
 - [x] A form with a "/pizza" route
 - [x] A name text input field
-- [ ] Validation for name - name must be at least 2 characters
+- [x] Validation for name - name must be at least 2 characters
 - [x] Dropdown form component for pizza size
 - [x] Checklist form component for toppings - at least 4 (hint: name each separately!)
 - [x] Text input form component for special instructions
-- [ ] An Add to Order button that submits form and returns a database record of name, pizza size, sauce, and special instructions
+- [x] An Add to Order button that submits form and returns a database record of name, pizza size, sauce, and special instructions
 
 #### Testing MVP
 
 Implement the following tests in Cypress:
 
-- [ ] test that you can add text to the box
-- [ ] test that you can select multiple toppings
-- [ ] test that you can submit the form
+- [x] test that you can add text to the box
+- [x] test that you can select multiple toppings
+- [x] test that you can submit the form
 
 You may use the following wireframe (also in a folder above) as guidance as you design your site but it is not required that you do so.
 
